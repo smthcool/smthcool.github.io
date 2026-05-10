@@ -76,6 +76,18 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    /* Дополнительные отступы для мобильных браузеров с нижней панелью */
+    .fullscreen .content-wrapper,
+    .section-block .content-wrapper {
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    /* Специально для VK и Telegram */
+    .vk-browser .content-wrapper,
+    .telegram-browser .content-wrapper {
+      padding-bottom: 90px !important;
+    }
+
     #block0 {
       background-image: url('pair.jpg');
       background-size: cover;
@@ -196,50 +208,61 @@
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 1.5rem;
+      padding: 2rem 1.5rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       min-height: 100%;
     }
 
+    /* Для мобильных устройств уменьшаем отступы сверху и снизу */
+    @media (max-width: 650px) {
+      .content-wrapper {
+        padding: 1.5rem 1.2rem;
+      }
+      
+      .fullscreen .content-wrapper,
+      .section-block .content-wrapper {
+        padding: 1rem 1.2rem;
+      }
+    }
+
     .section-title {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.8rem;
+      font-size: 3rem;
       text-align: center;
       color: #e6d5b3;
-      margin-bottom: 1rem;
-      margin-top: 0;
+      margin-bottom: 1.5rem;
     }
 
     .dresscode-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      line-height: 1.4;
+      font-size: 1.3rem;
+      line-height: 1.55;
       color: #f0ede8;
       font-weight: 500;
       text-align: center;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
     }
 
     .color-palette {
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
+      gap: 2rem;
       flex-wrap: wrap;
-      margin-top: 0.5rem;
+      margin-top: 1rem;
     }
 
     .color-circle {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.8rem;
     }
 
     .circle-img {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       object-fit: cover;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
@@ -248,57 +271,65 @@
 
     .color-label {
       font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 500;
       color: #d4c5a5;
     }
 
-    /* Новый компактный layout для деталей */
-    .details-compact {
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .info-card {
+      flex: 1;
+      min-width: 280px;
+      background: #1e3a2c;
+      border-radius: 32px;
+      padding: 1.8rem 1.5rem;
+      border: 1px solid #3a5c4a;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      margin-top: 0.5rem;
     }
 
-    .detail-item {
-      background: #1e3a2c;
-      border-radius: 24px;
-      padding: 1.2rem 1.2rem;
-      border: 1px solid #3a5c4a;
-      text-align: center;
-    }
-
-    .detail-title {
+    .card-title {
       font-family: 'Great Vibes', cursive;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      text-align: center;
       color: #e6d5b3;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
 
-    .detail-text {
+    .card-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      line-height: 1.4;
+      font-size: 1.1rem;
+      line-height: 1.5;
       color: #f0ede8;
+      text-align: center;
       font-weight: 500;
+      flex: 1;
     }
 
-    .chat-buttons {
+    .card-buttons {
       display: flex;
       justify-content: center;
       gap: 1rem;
-      margin-top: 0.8rem;
+      margin-top: 1.5rem;
       flex-wrap: wrap;
     }
 
     .social-btn {
       background: #2c4d3a;
       border-radius: 50px;
-      padding: 0.5rem 1.2rem;
+      padding: 0.7rem 1.3rem;
       color: #e6d5b3;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       border: 1px solid #e6c293;
       cursor: pointer;
       transition: all 0.2s;
@@ -306,8 +337,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      min-width: 100px;
+      gap: 8px;
+      min-width: 120px;
     }
 
     .social-btn:hover {
@@ -317,32 +348,32 @@
 
     .venue-card {
       background: #1e3a2c;
-      border-radius: 28px;
-      padding: 1.2rem;
+      border-radius: 32px;
+      padding: 1.8rem;
       box-shadow: 0 15px 35px -12px rgba(0, 0, 0, 0.2);
       border: 1px solid #3a5c4a;
     }
 
     .venue-title {
       font-family: 'Great Vibes', cursive;
-      font-size: 1.8rem;
+      font-size: 2rem;
       text-align: center;
       color: #e6d5b3;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
     }
 
     .place-image {
       width: 100%;
-      border-radius: 20px;
-      margin: 0.8rem 0;
+      border-radius: 24px;
+      margin: 1rem 0;
       object-fit: cover;
-      max-height: 180px;
+      max-height: 200px;
     }
 
     .location-address {
       font-family: 'Inter', sans-serif;
-      margin: 0.8rem 0;
-      font-size: 0.9rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
       color: #e6d5b3;
       text-align: center;
       font-weight: 500;
@@ -351,7 +382,7 @@
       justify-content: center;
       gap: 8px;
       background: #2c4d3a;
-      padding: 0.5rem;
+      padding: 0.7rem;
       border-radius: 50px;
       flex-wrap: wrap;
     }
@@ -363,51 +394,51 @@
     }
 
     .map-container {
-      margin-top: 0.8rem;
-      border-radius: 16px;
+      margin-top: 1rem;
+      border-radius: 20px;
       overflow: hidden;
     }
 
     .timer-section { text-align: center; }
     .timer-title {
       font-family: 'Great Vibes', cursive;
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #e6d5b3;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
     }
     .countdown {
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
     .countdown-item {
       background: #1e3a2c;
-      border-radius: 16px;
-      padding: 0.8rem 1.2rem;
-      min-width: 70px;
+      border-radius: 20px;
+      padding: 1rem 1.5rem;
+      min-width: 80px;
       border: 1px solid #3a5c4a;
     }
     .countdown-number {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 600;
       color: #e6c293;
     }
     .countdown-label {
       font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       color: #d4c5a5;
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
     }
     .final-names {
       font-family: 'Great Vibes', cursive;
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: #e6d5b3;
-      margin-top: 1rem;
-      padding-top: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
       border-top: 1px solid #3a5c4a;
       display: inline-block;
     }
@@ -567,64 +598,49 @@
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    /* Адаптация под мобильные */
     @media (max-width: 650px) {
-      .date-main { font-size: 3rem; }
-      .names { font-size: 2.5rem; }
-      .section-title { font-size: 2.2rem; margin-bottom: 0.8rem; }
+      .date-main { font-size: 3.5rem; }
+      .names { font-size: 3rem; }
+      .section-title { font-size: 2.5rem; }
       .heart-center-btn { width: 70px; height: 70px; }
       .heart-center-btn svg { width: 38px; height: 38px; }
       .click-text { font-size: 0.75rem; margin-top: 8px; padding: 4px 12px; }
+      .card-title { font-size: 1.5rem; }
+      .card-text { font-size: 1rem; }
+      .info-card { padding: 1.4rem; }
+      .venue-title { font-size: 1.8rem; }
       
-      .content-wrapper {
-        padding: 1rem;
+      /* Уменьшаем отступы в карточках на мобильных */
+      .cards-row {
+        gap: 1rem;
       }
       
-      .detail-item {
-        padding: 1rem;
+      .countdown-item {
+        padding: 0.8rem 1.2rem;
+        min-width: 70px;
       }
       
-      .detail-title {
-        font-size: 1.3rem;
-      }
-      
-      .detail-text {
-        font-size: 0.9rem;
-      }
-      
-      .venue-card {
-        padding: 1rem;
-      }
-      
-      .venue-title {
-        font-size: 1.5rem;
-      }
-      
-      .timer-title {
-        font-size: 1.8rem;
-      }
-      
-      .final-names {
-        font-size: 1.5rem;
-      }
-      
-      .circle-img {
-        width: 60px;
-        height: 60px;
+      .countdown-number {
+        font-size: 2rem;
       }
     }
 
-    /* Специально для VK - убираем лишние отступы */
-    .vk-browser .content-wrapper {
-      padding-bottom: 0.5rem;
-    }
-    
-    .vk-browser .details-compact {
-      gap: 0.8rem;
-    }
-    
-    .vk-browser .detail-item:last-child {
-      margin-bottom: 0;
+    /* Специальные стили для VK и Telegram на мобильных */
+    @media (max-width: 650px) {
+      .vk-browser .content-wrapper,
+      .telegram-browser .content-wrapper {
+        padding-bottom: 100px !important;
+      }
+      
+      .vk-browser .info-card:last-child,
+      .telegram-browser .info-card:last-child {
+        margin-bottom: 20px;
+      }
+      
+      .vk-browser .venue-card,
+      .telegram-browser .venue-card {
+        margin-bottom: 30px;
+      }
     }
   </style>
 </head>
@@ -667,7 +683,7 @@
     <div class="section-block" id="block1">
       <div class="content-wrapper">
         <div class="section-title fade-in-item">Дресс-код</div>
-        <div class="dresscode-text fade-in-item">Элегантный наряд в оттенках чёрного, бежевого и коричневого</div>
+        <div class="dresscode-text fade-in-item">Наденьте свой самый элегантный наряд — будь то изысканное платье, классический смокинг или утончённые детали.</div>
         <div class="color-palette fade-in-item">
           <div class="color-circle">
             <img src="black.jpg" alt="Чёрный" class="circle-img" onerror="this.style.backgroundColor='#1a1a1a'; this.style.display='flex';">
@@ -688,20 +704,21 @@
     <div class="section-block" id="block2">
       <div class="content-wrapper">
         <div class="section-title fade-in-item">Детали</div>
-        <div class="details-compact fade-in-item">
-          <div class="detail-item">
-            <div class="detail-title">💝 Пожелание</div>
-            <div class="detail-text">Будем рады лёгким подаркам в конвертах</div>
+        <div class="cards-row fade-in-item">
+          <div class="info-card">
+            <div class="card-title">Пожелание</div>
+            <div class="card-text">Чтобы наши руки были свободны для объятий, будем рады легким подаркам в конвертах</div>
           </div>
-          <div class="detail-item">
-            <div class="detail-title">👨‍👩‍👧 Дорогие гости</div>
-            <div class="detail-text">Формат 18+. Пожалуйста, позаботьтесь о детях заранее</div>
+          <div class="info-card">
+            <div class="card-title">Дорогие гости</div>
+            <div class="card-text">Мы с теплотой относимся к детям любого возраста. Но для камерной свадьбы выбрали формат 18+. Просим позаботиться заранее о том, с кем вы оставите своих детей на время банкета.</div>
           </div>
-          <div class="detail-item">
-            <div class="detail-title">📱 Связь с нами</div>
-            <div class="chat-buttons">
-              <a href="#" class="social-btn" id="telegramLink" target="_blank">📨 Telegram</a>
-              <a href="#" class="social-btn" id="vkLink" target="_blank">📘 VK</a>
+          <div class="info-card">
+            <div class="card-title">Общий чат</div>
+            <div class="card-text">Переходите в VK и Телеграм, чтобы добавлять туда свадебные видео, кружочки и фотографии</div>
+            <div class="card-buttons">
+              <a href="#" class="social-btn" id="telegramLink" target="_blank">Telegram</a>
+              <a href="#" class="social-btn" id="vkLink" target="_blank">VK</a>
             </div>
           </div>
         </div>
@@ -711,13 +728,13 @@
     <div class="section-block" id="block3">
       <div class="content-wrapper">
         <div class="venue-card fade-in-item">
-          <div class="venue-title">📍 Место проведения</div>
+          <div class="venue-title">Место проведения</div>
           <img src="place.jpg" alt="Место проведения" class="place-image" onerror="this.style.display='none'">
           <div class="location-address">
-            <span>🏕️</span> 
+            <span>📍</span> 
             <a href="https://yandex.ru/maps/org/1349629041" target="_blank">Липецкая область, Донской Лес</a>
           </div>
-          <div class="map-container"><div id="yandexMap" style="width:100%; height:250px; background:#2c4d3a; display:flex; align-items:center; justify-content:center; color:#c1b28b;">Загрузка карты...</div></div>
+          <div class="map-container"><div id="yandexMap" style="width:100%; height:280px; background:#2c4d3a; display:flex; align-items:center; justify-content:center; color:#c1b28b;">Загрузка карты...</div></div>
         </div>
       </div>
     </div>
@@ -741,12 +758,21 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Определяем браузеры с нижней панелью
   function isVKBrowser() {
     return navigator.userAgent.match(/VK|vk|Vkontakte/i) !== null;
   }
   
+  function isTelegramBrowser() {
+    return navigator.userAgent.match(/Telegram|tg/i) !== null;
+  }
+  
   if (isVKBrowser()) {
     document.body.classList.add('vk-browser');
+  }
+  
+  if (isTelegramBrowser()) {
+    document.body.classList.add('telegram-browser');
   }
   
   const heartWrapper = document.getElementById('heartWrapper');
@@ -760,7 +786,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentIndex = 0;
   let isAnimating = false;
   let scrollLocked = true;
+  let startY = 0;
   
+  // Функция обновления позиции
   function updatePosition(index, animate = true) {
     if (index < 0) index = 0;
     if (index >= blockCount) index = blockCount - 1;
@@ -781,10 +809,11 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       blocksWrapper.style.transition = 'none';
       blocksWrapper.style.transform = `translateY(${newY}px)`;
-      blocksWrapper.offsetHeight;
+      blocksWrapper.offsetHeight; // force reflow
       blocksWrapper.style.transition = '';
     }
     
+    // Активируем видимость блоков
     blocks.forEach((block, idx) => {
       if (idx === currentIndex) {
         block.classList.add('block-visible');
@@ -792,6 +821,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Открытие конверта
   function openEnvelope() {
     if (!envelopeOverlay) return;
     
@@ -816,6 +846,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Обработка колесика мыши
   let wheelTimeout = null;
   window.addEventListener('wheel', (e) => {
     if (scrollLocked || isAnimating) {
@@ -847,6 +878,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 600);
   }, { passive: false });
   
+  // Обработка тач-свайпов
   let touchStartY = 0;
   let touchTimeout = null;
   
@@ -880,6 +912,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 600);
   }, { passive: true });
   
+  // Кнопка скролла
   const scrollHint = document.getElementById('scrollHint');
   if (scrollHint) {
     scrollHint.addEventListener('click', () => {
@@ -889,6 +922,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Социальные ссылки
   const telegramBtn = document.getElementById('telegramLink');
   const vkBtn = document.getElementById('vkLink');
   const TELEGRAM_URL = 'https://t.me/+vOJm_rQVxIYwN2Ni';
@@ -896,6 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (telegramBtn) telegramBtn.href = TELEGRAM_URL;
   if (vkBtn) vkBtn.href = VK_URL;
   
+  // Яндекс Карты
   const venueLat = 52.462893;
   const venueLon = 38.953394;
   const venueAddress = "Липецкая область, Донской Лес";
@@ -929,6 +964,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   loadYandexMap();
   
+  // Таймер
   function updateCountdown() {
     const weddingDate = new Date(2026, 7, 9, 16, 0, 0);
     const now = new Date();
@@ -952,6 +988,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateCountdown();
   setInterval(updateCountdown, 1000);
   
+  // Обработка ресайза
   window.addEventListener('resize', () => {
     if (!scrollLocked) {
       setTimeout(() => {
