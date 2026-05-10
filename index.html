@@ -17,6 +17,7 @@
       background-color: #0a1f1a;
       overflow-x: hidden;
       position: relative;
+      overflow-y: hidden;
     }
 
     /* Фоновое изображение для всей страницы */
@@ -205,6 +206,16 @@
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
+    /* Контейнер для блоков с прокруткой */
+    .blocks-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+    }
+
     /* Стили блоков */
     .fullscreen, .section-block {
       position: relative;
@@ -213,6 +224,7 @@
       height: 100dvh;
       overflow-y: auto;
       overflow-x: hidden;
+      scroll-snap-align: start;
     }
 
     /* Первый блок с фото */
@@ -603,6 +615,17 @@
     .block-visible .fade-in-item:nth-child(2) { transition-delay: 0.15s; }
     .block-visible .fade-in-item:nth-child(3) { transition-delay: 0.25s; }
     
+    /* Скрываем скроллбар */
+    .fullscreen::-webkit-scrollbar,
+    .section-block::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .fullscreen, .section-block {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     /* Мобильные и Telegram исправления */
     @media (max-width: 650px) {
       .date-main { font-size: 3.5rem; }
@@ -630,6 +653,7 @@
     @supports (height: 100dvh) {
       .wedding-bg,
       .envelope-overlay,
+      .blocks-container,
       .fullscreen,
       .section-block {
         height: 100dvh;
@@ -810,13 +834,13 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentIndex = 0;
   let isScrolling = false;
   let scrollLocked = true;
+  let scrollTimeout = null;
   
   // Функция открытия конверта с учетом VK
   function openEnvelope() {
     if (!envelopeOverlay) return;
     
     if (isVKBrowser()) {
-      // Для VK - упрощенная анимация
       envelopeOverlay.style.transition = 'opacity 0.5s ease';
       envelopeOverlay.style.opacity = '0';
       setTimeout(() => {
@@ -825,8 +849,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (weddingBg) weddingBg.classList.add('revealed');
         scrollLocked = false;
         if (blocks[0]) {
-          blocks[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-          blocks[0].classList.add('block-visible');
+          scrollToBlock(0, true);
+          setTimeout(() => {
+            blocks[0].classList.add('block-visible');
+          }, 100);
         }
         setupIntersectionObserver();
       }, 500);
@@ -838,8 +864,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (weddingBg) weddingBg.classList.add('revealed');
         scrollLocked = false;
         if (blocks[0]) {
-          blocks[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-          blocks[0].classList.add('block-visible');
+          scrollToBlock(0, true);
+          setTimeout(() => {
+            blocks[0].classList.add('block-visible');
+          }, 100);
         }
         setupIntersectionObserver();
       }, 50);
@@ -856,60 +884,121 @@ document.addEventListener('DOMContentLoaded', function() {
   function setupIntersectionObserver() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('block-visible');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('block-visible');
+        }
       });
     }, { threshold: 0.3 });
     blocks.forEach(block => observer.observe(block));
   }
   
-  function scrollToBlock(index) {
-    if (isScrolling || scrollLocked) return;
-    if (index < 0) index = 0;
-    if (index >= blocks.length) index = blocks.length - 1;
-    if (index === currentIndex) return;
+  // Функция прокрутки к блоку
+  function scrollToBlock(index, instant = false) {
+    if (isScrolling || scrollLocked) return false;
+    if (index < 0 || index >= blocks.length) return false;
+    if (index === currentIndex) return false;
+    
     isScrolling = true;
     currentIndex = index;
-    blocks[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setTimeout(() => { isScrolling = false; }, 500);
+    
+    const targetBlock = blocks[currentIndex];
+    targetBlock.scrollIntoView({ 
+      behavior: instant ? 'auto' : 'smooth', 
+      block: 'start' 
+    });
+    
+    // Блокируем скролл на время анимации
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      isScrolling = false;
+      scrollTimeout = null;
+    }, 800);
+    
+    return true;
   }
   
-  let wheelTimeout = null;
+  // Обработка колесика мыши
+  let wheelHandler = null;
   window.addEventListener('wheel', (e) => {
-    if (scrollLocked) return;
-    if (wheelTimeout) { 
-      e.preventDefault(); 
-      return; 
+    if (scrollLocked || isScrolling) {
+      e.preventDefault();
+      return;
     }
+    
+    if (wheelHandler) {
+      e.preventDefault();
+      return;
+    }
+    
     const delta = e.deltaY;
+    let targetIndex = currentIndex;
+    
     if (delta > 0 && currentIndex < blocks.length - 1) {
-      e.preventDefault();
-      scrollToBlock(currentIndex + 1);
-      wheelTimeout = setTimeout(() => wheelTimeout = null, 600);
+      targetIndex = currentIndex + 1;
     } else if (delta < 0 && currentIndex > 0) {
-      e.preventDefault();
-      scrollToBlock(currentIndex - 1);
-      wheelTimeout = setTimeout(() => wheelTimeout = null, 600);
+      targetIndex = currentIndex - 1;
+    } else {
+      return;
+    }
+    
+    e.preventDefault();
+    
+    if (scrollToBlock(targetIndex)) {
+      wheelHandler = setTimeout(() => {
+        wheelHandler = null;
+      }, 800);
     }
   }, { passive: false });
   
-  let touchStartY = 0, touchTimeout = null;
-  window.addEventListener('touchstart', (e) => {
-    if (!scrollLocked) touchStartY = e.touches[0].clientY;
-  });
-  window.addEventListener('touchend', (e) => {
-    if (scrollLocked || touchTimeout) return;
-    const diff = touchStartY - e.changedTouches[0].clientY;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0 && currentIndex < blocks.length - 1) scrollToBlock(currentIndex + 1);
-      else if (diff < 0 && currentIndex > 0) scrollToBlock(currentIndex - 1);
-      touchTimeout = setTimeout(() => touchTimeout = null, 600);
-    }
-  });
+  // Обработка тач-свайпов
+  let touchStartY = 0;
+  let touchEndY = 0;
+  let touchStartTime = 0;
+  let touchHandler = null;
   
+  window.addEventListener('touchstart', (e) => {
+    if (scrollLocked || isScrolling) return;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+  
+  window.addEventListener('touchend', (e) => {
+    if (scrollLocked || isScrolling || touchHandler) return;
+    
+    touchEndY = e.changedTouches[0].clientY;
+    const deltaY = touchStartY - touchEndY;
+    const deltaTime = Date.now() - touchStartTime;
+    
+    // Минимальное расстояние для свайпа - 30px
+    if (Math.abs(deltaY) < 30) return;
+    
+    let targetIndex = currentIndex;
+    
+    if (deltaY > 0 && currentIndex < blocks.length - 1) {
+      // Свайп вверх
+      targetIndex = currentIndex + 1;
+    } else if (deltaY < 0 && currentIndex > 0) {
+      // Свайп вниз
+      targetIndex = currentIndex - 1;
+    } else {
+      return;
+    }
+    
+    // Блокируем быстрые множественные свайпы
+    if (scrollToBlock(targetIndex)) {
+      touchHandler = setTimeout(() => {
+        touchHandler = null;
+      }, 800);
+    }
+  }, { passive: true });
+  
+  // Кнопка скролла
   const scrollHint = document.getElementById('scrollHint');
   if (scrollHint) {
     scrollHint.addEventListener('click', () => {
-      if (!scrollLocked && currentIndex < blocks.length - 1) scrollToBlock(currentIndex + 1);
+      if (!scrollLocked && !isScrolling && currentIndex < blocks.length - 1) {
+        scrollToBlock(currentIndex + 1);
+      }
     });
   }
   
@@ -955,6 +1044,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   loadYandexMap();
   
+  // Таймер обратного отсчета
   function updateCountdown() {
     const weddingDate = new Date(2026, 7, 9, 16, 0, 0);
     const now = new Date();
@@ -984,8 +1074,26 @@ document.addEventListener('DOMContentLoaded', function() {
       if (envelopeOverlay && !envelopeOverlay.classList.contains('open') && envelopeOverlay.style.display !== 'none') {
         document.body.style.height = window.innerHeight + 'px';
       }
+      // Корректируем позицию текущего блока при изменении ориентации
+      if (!scrollLocked && blocks[currentIndex]) {
+        setTimeout(() => {
+          blocks[currentIndex].scrollIntoView({ block: 'start', behavior: 'auto' });
+        }, 50);
+      }
     });
   }
+  
+  // Блокируем нативные скроллы внутри блоков
+  blocks.forEach(block => {
+    block.addEventListener('touchmove', (e) => {
+      const target = e.target;
+      const isScrollingElement = target.closest('.content-wrapper, .hero-text');
+      if (!isScrollingElement && !scrollLocked) {
+        // Разрешаем скролл внутри контента
+        return;
+      }
+    }, { passive: false });
+  });
 });
 </script>
 </body>
