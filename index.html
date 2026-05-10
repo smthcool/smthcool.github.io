@@ -15,9 +15,12 @@
     body {
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       background-color: #0a1f1a;
-      overflow-x: hidden;
-      position: relative;
-      overflow-y: hidden;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
 
     /* Фоновое изображение для всей страницы */
@@ -49,171 +52,17 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.01s ease;
+      height: 100vh;
+      height: 100dvh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
     }
 
     .main-content.visible {
       opacity: 1;
       visibility: visible;
-    }
-
-    /* === КОНВЕРТ ИЗ 4 ТРЕУГОЛЬНЫХ СТВОРОК === */
-    .envelope-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    .flap-triangle {
-      position: fixed;
-      background: linear-gradient(145deg, #dbbc91, #b48b54);
-      transition: all 4.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-      z-index: 1001;
-      will-change: transform;
-      pointer-events: none;
-    }
-
-    /* Верхняя створка — ровно половина высоты экрана */
-    .flap-top {
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50vh;
-      height: 50dvh;
-      clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-      transform-origin: bottom center;
-      background: linear-gradient(160deg, #e6ca9e, #c9a36b);
-    }
-
-    /* Нижняя створка */
-    .flap-bottom {
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50vh;
-      height: 50dvh;
-      clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
-      transform-origin: top center;
-      background: linear-gradient(340deg, #e6ca9e, #b48b54);
-    }
-
-    /* Левая створка */
-    .flap-left {
-      top: 0;
-      left: 0;
-      width: 50vw;
-      height: 100vh;
-      height: 100dvh;
-      clip-path: polygon(0% 0%, 0% 100%, 100% 50%);
-      transform-origin: right center;
-      background: linear-gradient(110deg, #dbbc91, #b4813a);
-    }
-
-    /* Правая створка */
-    .flap-right {
-      top: 0;
-      right: 0;
-      width: 50vw;
-      height: 100vh;
-      height: 100dvh;
-      clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
-      transform-origin: left center;
-      background: linear-gradient(290deg, #e2bd84, #a5723e);
-    }
-
-    /* Открытое состояние — створки улетают */
-    .open .flap-top {
-      transform: translateY(-100vh);
-      transform: translateY(-100dvh);
-    }
-
-    .open .flap-bottom {
-      transform: translateY(100vh);
-      transform: translateY(100dvh);
-    }
-
-    .open .flap-left {
-      transform: translateX(-100vw);
-    }
-
-    .open .flap-right {
-      transform: translateX(100vw);
-    }
-
-    /* Сердечко + подпись "Нажми" */
-    .heart-wrapper {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1010;
-      cursor: pointer;
-      pointer-events: auto;
-    }
-
-    .heart-center-btn {
-      width: 90px;
-      height: 90px;
-      background: #c13b3b;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      border: 3px solid rgba(255, 220, 150, 0.9);
-    }
-
-    .heart-center-btn:hover {
-      transform: scale(1.08);
-      background: #a52a2a;
-    }
-
-    .heart-center-btn svg {
-      width: 48px;
-      height: 48px;
-      fill: white;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-    }
-
-    .click-text {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      color: rgba(255, 240, 200, 0.95);
-      margin-top: 12px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(4px);
-      padding: 5px 14px;
-      border-radius: 40px;
-      transition: all 0.2s;
-    }
-
-    .open .heart-wrapper {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0);
-      pointer-events: none;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    /* Контейнер для блоков с прокруткой */
-    .blocks-container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      overflow-y: hidden;
-      scroll-behavior: smooth;
     }
 
     /* Стили блоков */
@@ -222,9 +71,10 @@
       width: 100%;
       height: 100vh;
       height: 100dvh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
       overflow-y: auto;
       overflow-x: hidden;
-      scroll-snap-align: start;
     }
 
     /* Первый блок с фото */
@@ -616,12 +466,11 @@
     .block-visible .fade-in-item:nth-child(3) { transition-delay: 0.25s; }
     
     /* Скрываем скроллбар */
-    .fullscreen::-webkit-scrollbar,
-    .section-block::-webkit-scrollbar {
+    .main-content::-webkit-scrollbar {
       display: none;
     }
     
-    .fullscreen, .section-block {
+    .main-content {
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
@@ -642,51 +491,19 @@
       #block0 {
         background-attachment: scroll !important;
       }
-      
-      .fullscreen, .section-block {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
     }
 
-    /* Поддержка 100dvh для современных браузеров без поломки створок */
+    /* Поддержка 100dvh для современных браузеров */
     @supports (height: 100dvh) {
       .wedding-bg,
-      .envelope-overlay,
-      .blocks-container,
+      .main-content,
       .fullscreen,
       .section-block {
         height: 100dvh;
       }
-      
-      .flap-top, .flap-bottom {
-        height: 50dvh;
-      }
-      
-      .flap-left, .flap-right {
-        height: 100dvh;
-      }
-      
-      .open .flap-top {
-        transform: translateY(-100dvh);
-      }
-      
-      .open .flap-bottom {
-        transform: translateY(100dvh);
-      }
     }
 
     /* VK Browser Fixes */
-    .vk-browser .flap-triangle {
-      background: #c9a36b !important;
-      backdrop-filter: none !important;
-    }
-    
-    .vk-browser .flap-left,
-    .vk-browser .flap-right {
-      width: 50% !important;
-    }
-    
     .vk-browser .heart-center-btn {
       background: #c13b3b !important;
       -webkit-transform: translateZ(0);
@@ -699,14 +516,143 @@
     .vk-browser .info-card {
       transform: translateZ(0);
     }
+
+    /* Конверт */
+    .envelope-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .flap-triangle {
+      position: fixed;
+      background: linear-gradient(145deg, #dbbc91, #b48b54);
+      transition: all 3s cubic-bezier(0.34, 1.2, 0.64, 1);
+      z-index: 1001;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    .flap-top {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+      transform-origin: bottom center;
+      background: linear-gradient(160deg, #e6ca9e, #c9a36b);
+    }
+
+    .flap-bottom {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+      transform-origin: top center;
+      background: linear-gradient(340deg, #e6ca9e, #b48b54);
+    }
+
+    .flap-left {
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      clip-path: polygon(0% 0%, 0% 100%, 100% 50%);
+      transform-origin: right center;
+      background: linear-gradient(110deg, #dbbc91, #b4813a);
+    }
+
+    .flap-right {
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
+      transform-origin: left center;
+      background: linear-gradient(290deg, #e2bd84, #a5723e);
+    }
+
+    .open .flap-top {
+      transform: translateY(-100%);
+    }
+
+    .open .flap-bottom {
+      transform: translateY(100%);
+    }
+
+    .open .flap-left {
+      transform: translateX(-100%);
+    }
+
+    .open .flap-right {
+      transform: translateX(100%);
+    }
+
+    .heart-wrapper {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1010;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .heart-center-btn {
+      width: 90px;
+      height: 90px;
+      background: #c13b3b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      border: 3px solid rgba(255, 220, 150, 0.9);
+    }
+
+    .heart-center-btn svg {
+      width: 48px;
+      height: 48px;
+      fill: white;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .click-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: rgba(255, 240, 200, 0.95);
+      margin-top: 12px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      padding: 5px 14px;
+      border-radius: 40px;
+    }
+
+    .open .heart-wrapper {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
   </style>
 </head>
 <body>
 
-<!-- Фоновое изображение -->
 <div class="wedding-bg" id="weddingBg"></div>
 
-<!-- 4 ТРЕУГОЛЬНЫЕ СТВОРКИ + сердечко с подписью -->
 <div class="envelope-overlay" id="envelopeOverlay">
   <div class="flap-triangle flap-top"></div>
   <div class="flap-triangle flap-bottom"></div>
@@ -722,7 +668,6 @@
   </div>
 </div>
 
-<!-- Основной контент -->
 <div class="main-content" id="mainContent">
   <div class="fullscreen" id="block0">
     <div class="overlay-hero"></div>
@@ -816,12 +761,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Определяем VK Mobile
   function isVKBrowser() {
     return navigator.userAgent.match(/VK|vk|Vkontakte/i) !== null;
   }
   
-  // Добавляем класс для VK
   if (isVKBrowser()) {
     document.body.classList.add('vk-browser');
   }
@@ -834,9 +777,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentIndex = 0;
   let isScrolling = false;
   let scrollLocked = true;
-  let scrollTimeout = null;
   
-  // Функция открытия конверта с учетом VK
   function openEnvelope() {
     if (!envelopeOverlay) return;
     
@@ -848,28 +789,21 @@ document.addEventListener('DOMContentLoaded', function() {
         if (mainContent) mainContent.classList.add('visible');
         if (weddingBg) weddingBg.classList.add('revealed');
         scrollLocked = false;
-        if (blocks[0]) {
-          scrollToBlock(0, true);
-          setTimeout(() => {
-            blocks[0].classList.add('block-visible');
-          }, 100);
-        }
-        setupIntersectionObserver();
+        setupScrollHandling();
+        setTimeout(() => {
+          if (blocks[0]) blocks[0].classList.add('block-visible');
+        }, 100);
       }, 500);
     } else {
       envelopeOverlay.classList.add('open');
-      
       setTimeout(() => {
         if (mainContent) mainContent.classList.add('visible');
         if (weddingBg) weddingBg.classList.add('revealed');
         scrollLocked = false;
-        if (blocks[0]) {
-          scrollToBlock(0, true);
-          setTimeout(() => {
-            blocks[0].classList.add('block-visible');
-          }, 100);
-        }
-        setupIntersectionObserver();
+        setupScrollHandling();
+        setTimeout(() => {
+          if (blocks[0]) blocks[0].classList.add('block-visible');
+        }, 100);
       }, 50);
     }
   }
@@ -881,128 +815,163 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  function setupIntersectionObserver() {
+  function setupScrollHandling() {
+    // Используем scroll-snap CSS вместо JS для точного позиционирования
+    let scrollTimeout = null;
+    let isManualScroll = false;
+    
+    // Отслеживаем изменение скролла с помощью Intersection Observer
     const observer = new IntersectionObserver((entries) => {
+      if (isManualScroll) return;
+      
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          const index = Array.from(blocks).indexOf(entry.target);
+          if (index !== -1 && index !== currentIndex && !isScrolling) {
+            isScrolling = true;
+            currentIndex = index;
+            setTimeout(() => {
+              isScrolling = false;
+            }, 500);
+          }
           entry.target.classList.add('block-visible');
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.5 });
+    
     blocks.forEach(block => observer.observe(block));
-  }
-  
-  // Функция прокрутки к блоку
-  function scrollToBlock(index, instant = false) {
-    if (isScrolling || scrollLocked) return false;
-    if (index < 0 || index >= blocks.length) return false;
-    if (index === currentIndex) return false;
     
-    isScrolling = true;
-    currentIndex = index;
-    
-    const targetBlock = blocks[currentIndex];
-    targetBlock.scrollIntoView({ 
-      behavior: instant ? 'auto' : 'smooth', 
-      block: 'start' 
+    // Предотвращаем инерционный скролл
+    mainContent.addEventListener('scroll', () => {
+      if (scrollTimeout) return;
+      
+      scrollTimeout = setTimeout(() => {
+        // Находим ближайший блок
+        let closestBlock = null;
+        let closestDistance = Infinity;
+        
+        blocks.forEach((block, idx) => {
+          const rect = block.getBoundingClientRect();
+          const distance = Math.abs(rect.top);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestBlock = { block: block, index: idx };
+          }
+        });
+        
+        if (closestBlock && closestBlock.index !== currentIndex && !isScrolling) {
+          isManualScroll = true;
+          isScrolling = true;
+          currentIndex = closestBlock.index;
+          closestBlock.block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          
+          setTimeout(() => {
+            isScrolling = false;
+            setTimeout(() => {
+              isManualScroll = false;
+            }, 200);
+          }, 600);
+        }
+        
+        scrollTimeout = null;
+      }, 100);
     });
     
-    // Блокируем скролл на время анимации
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      isScrolling = false;
-      scrollTimeout = null;
-    }, 800);
+    // Блокируем быстрые множественные скроллы
+    let wheelTime = 0;
+    mainContent.addEventListener('wheel', (e) => {
+      if (scrollLocked) {
+        e.preventDefault();
+        return;
+      }
+      
+      const now = Date.now();
+      if (now - wheelTime < 600) {
+        e.preventDefault();
+        return;
+      }
+      
+      const delta = e.deltaY;
+      let targetIndex = currentIndex;
+      
+      if (delta > 0 && currentIndex < blocks.length - 1) {
+        targetIndex = currentIndex + 1;
+      } else if (delta < 0 && currentIndex > 0) {
+        targetIndex = currentIndex - 1;
+      } else {
+        return;
+      }
+      
+      e.preventDefault();
+      wheelTime = now;
+      isScrolling = true;
+      currentIndex = targetIndex;
+      blocks[targetIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      setTimeout(() => {
+        isScrolling = false;
+      }, 600);
+    }, { passive: false });
     
-    return true;
+    // Обработка тач-свайпов
+    let touchStartY = 0;
+    let touchTime = 0;
+    
+    mainContent.addEventListener('touchstart', (e) => {
+      if (scrollLocked) return;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    
+    mainContent.addEventListener('touchend', (e) => {
+      if (scrollLocked) return;
+      
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+      const now = Date.now();
+      
+      if (now - touchTime < 600) {
+        e.preventDefault();
+        return;
+      }
+      
+      if (Math.abs(deltaY) < 30) return;
+      
+      let targetIndex = currentIndex;
+      
+      if (deltaY > 0 && currentIndex < blocks.length - 1) {
+        targetIndex = currentIndex + 1;
+      } else if (deltaY < 0 && currentIndex > 0) {
+        targetIndex = currentIndex - 1;
+      } else {
+        return;
+      }
+      
+      e.preventDefault();
+      touchTime = now;
+      isScrolling = true;
+      currentIndex = targetIndex;
+      blocks[targetIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      setTimeout(() => {
+        isScrolling = false;
+      }, 600);
+    }, { passive: false });
   }
   
-  // Обработка колесика мыши
-  let wheelHandler = null;
-  window.addEventListener('wheel', (e) => {
-    if (scrollLocked || isScrolling) {
-      e.preventDefault();
-      return;
-    }
-    
-    if (wheelHandler) {
-      e.preventDefault();
-      return;
-    }
-    
-    const delta = e.deltaY;
-    let targetIndex = currentIndex;
-    
-    if (delta > 0 && currentIndex < blocks.length - 1) {
-      targetIndex = currentIndex + 1;
-    } else if (delta < 0 && currentIndex > 0) {
-      targetIndex = currentIndex - 1;
-    } else {
-      return;
-    }
-    
-    e.preventDefault();
-    
-    if (scrollToBlock(targetIndex)) {
-      wheelHandler = setTimeout(() => {
-        wheelHandler = null;
-      }, 800);
-    }
-  }, { passive: false });
-  
-  // Обработка тач-свайпов
-  let touchStartY = 0;
-  let touchEndY = 0;
-  let touchStartTime = 0;
-  let touchHandler = null;
-  
-  window.addEventListener('touchstart', (e) => {
-    if (scrollLocked || isScrolling) return;
-    touchStartY = e.touches[0].clientY;
-    touchStartTime = Date.now();
-  }, { passive: true });
-  
-  window.addEventListener('touchend', (e) => {
-    if (scrollLocked || isScrolling || touchHandler) return;
-    
-    touchEndY = e.changedTouches[0].clientY;
-    const deltaY = touchStartY - touchEndY;
-    const deltaTime = Date.now() - touchStartTime;
-    
-    // Минимальное расстояние для свайпа - 30px
-    if (Math.abs(deltaY) < 30) return;
-    
-    let targetIndex = currentIndex;
-    
-    if (deltaY > 0 && currentIndex < blocks.length - 1) {
-      // Свайп вверх
-      targetIndex = currentIndex + 1;
-    } else if (deltaY < 0 && currentIndex > 0) {
-      // Свайп вниз
-      targetIndex = currentIndex - 1;
-    } else {
-      return;
-    }
-    
-    // Блокируем быстрые множественные свайпы
-    if (scrollToBlock(targetIndex)) {
-      touchHandler = setTimeout(() => {
-        touchHandler = null;
-      }, 800);
-    }
-  }, { passive: true });
-  
-  // Кнопка скролла
   const scrollHint = document.getElementById('scrollHint');
   if (scrollHint) {
     scrollHint.addEventListener('click', () => {
-      if (!scrollLocked && !isScrolling && currentIndex < blocks.length - 1) {
-        scrollToBlock(currentIndex + 1);
+      if (!scrollLocked && currentIndex < blocks.length - 1) {
+        isScrolling = true;
+        currentIndex++;
+        blocks[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+          isScrolling = false;
+        }, 600);
       }
     });
   }
   
-  // Социальные ссылки
   const telegramBtn = document.getElementById('telegramLink');
   const vkBtn = document.getElementById('vkLink');
   const TELEGRAM_URL = 'https://t.me/+vOJm_rQVxIYwN2Ni';
@@ -1010,7 +979,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (telegramBtn) telegramBtn.href = TELEGRAM_URL;
   if (vkBtn) vkBtn.href = VK_URL;
   
-  // Яндекс Карты
   const venueLat = 52.462893;
   const venueLon = 38.953394;
   const venueAddress = "Липецкая область, Донской Лес";
@@ -1044,7 +1012,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   loadYandexMap();
   
-  // Таймер обратного отсчета
   function updateCountdown() {
     const weddingDate = new Date(2026, 7, 9, 16, 0, 0);
     const now = new Date();
@@ -1067,33 +1034,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
-  
-  // Для VK - принудительный пересчет размеров
-  if (isVKBrowser()) {
-    window.addEventListener('resize', function() {
-      if (envelopeOverlay && !envelopeOverlay.classList.contains('open') && envelopeOverlay.style.display !== 'none') {
-        document.body.style.height = window.innerHeight + 'px';
-      }
-      // Корректируем позицию текущего блока при изменении ориентации
-      if (!scrollLocked && blocks[currentIndex]) {
-        setTimeout(() => {
-          blocks[currentIndex].scrollIntoView({ block: 'start', behavior: 'auto' });
-        }, 50);
-      }
-    });
-  }
-  
-  // Блокируем нативные скроллы внутри блоков
-  blocks.forEach(block => {
-    block.addEventListener('touchmove', (e) => {
-      const target = e.target;
-      const isScrollingElement = target.closest('.content-wrapper, .hero-text');
-      if (!isScrollingElement && !scrollLocked) {
-        // Разрешаем скролл внутри контента
-        return;
-      }
-    }, { passive: false });
-  });
 });
 </script>
 </body>
