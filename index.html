@@ -59,7 +59,6 @@
       visibility: visible;
     }
 
-    /* Контейнер для блоков */
     .blocks-wrapper {
       position: relative;
       width: 100%;
@@ -75,6 +74,18 @@
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
+    }
+
+    /* Дополнительные отступы для мобильных браузеров с нижней панелью */
+    .fullscreen .content-wrapper,
+    .section-block .content-wrapper {
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    /* Специально для VK и Telegram */
+    .vk-browser .content-wrapper,
+    .telegram-browser .content-wrapper {
+      padding-bottom: 90px !important;
     }
 
     #block0 {
@@ -204,12 +215,24 @@
       min-height: 100%;
     }
 
+    /* Для мобильных устройств уменьшаем отступы сверху и снизу */
+    @media (max-width: 650px) {
+      .content-wrapper {
+        padding: 1.5rem 1.2rem;
+      }
+      
+      .fullscreen .content-wrapper,
+      .section-block .content-wrapper {
+        padding: 1rem 1.2rem;
+      }
+    }
+
     .section-title {
       font-family: 'Great Vibes', cursive;
       font-size: 3rem;
       text-align: center;
       color: #e6d5b3;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .dresscode-text {
@@ -219,7 +242,7 @@
       color: #f0ede8;
       font-weight: 500;
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .color-palette {
@@ -227,7 +250,7 @@
       justify-content: center;
       gap: 2rem;
       flex-wrap: wrap;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
 
     .color-circle {
@@ -256,9 +279,9 @@
     .cards-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 1.5rem;
       justify-content: center;
-      margin: 1.5rem 0;
+      margin: 1rem 0;
     }
 
     .info-card {
@@ -266,7 +289,7 @@
       min-width: 280px;
       background: #1e3a2c;
       border-radius: 32px;
-      padding: 2rem 1.8rem;
+      padding: 1.8rem 1.5rem;
       border: 1px solid #3a5c4a;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.3);
@@ -284,7 +307,7 @@
 
     .card-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       line-height: 1.5;
       color: #f0ede8;
       text-align: center;
@@ -326,14 +349,14 @@
     .venue-card {
       background: #1e3a2c;
       border-radius: 32px;
-      padding: 2rem;
+      padding: 1.8rem;
       box-shadow: 0 15px 35px -12px rgba(0, 0, 0, 0.2);
       border: 1px solid #3a5c4a;
     }
 
     .venue-title {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.2rem;
+      font-size: 2rem;
       text-align: center;
       color: #e6d5b3;
       margin-bottom: 1rem;
@@ -344,13 +367,13 @@
       border-radius: 24px;
       margin: 1rem 0;
       object-fit: cover;
-      max-height: 250px;
+      max-height: 200px;
     }
 
     .location-address {
       font-family: 'Inter', sans-serif;
       margin: 1rem 0;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #e6d5b3;
       text-align: center;
       font-weight: 500;
@@ -371,7 +394,7 @@
     }
 
     .map-container {
-      margin-top: 1.2rem;
+      margin-top: 1rem;
       border-radius: 20px;
       overflow: hidden;
     }
@@ -379,43 +402,43 @@
     .timer-section { text-align: center; }
     .timer-title {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       color: #e6d5b3;
       margin-bottom: 1rem;
     }
     .countdown {
       display: flex;
       justify-content: center;
-      gap: 2rem;
+      gap: 1.5rem;
       flex-wrap: wrap;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     .countdown-item {
       background: #1e3a2c;
       border-radius: 20px;
-      padding: 1.2rem 1.8rem;
-      min-width: 100px;
+      padding: 1rem 1.5rem;
+      min-width: 80px;
       border: 1px solid #3a5c4a;
     }
     .countdown-number {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 600;
       color: #e6c293;
     }
     .countdown-label {
       font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       color: #d4c5a5;
       margin-top: 0.5rem;
     }
     .final-names {
       font-family: 'Great Vibes', cursive;
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: #e6d5b3;
-      margin-top: 2rem;
-      padding-top: 2rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
       border-top: 1px solid #3a5c4a;
       display: inline-block;
     }
@@ -586,6 +609,38 @@
       .card-text { font-size: 1rem; }
       .info-card { padding: 1.4rem; }
       .venue-title { font-size: 1.8rem; }
+      
+      /* Уменьшаем отступы в карточках на мобильных */
+      .cards-row {
+        gap: 1rem;
+      }
+      
+      .countdown-item {
+        padding: 0.8rem 1.2rem;
+        min-width: 70px;
+      }
+      
+      .countdown-number {
+        font-size: 2rem;
+      }
+    }
+
+    /* Специальные стили для VK и Telegram на мобильных */
+    @media (max-width: 650px) {
+      .vk-browser .content-wrapper,
+      .telegram-browser .content-wrapper {
+        padding-bottom: 100px !important;
+      }
+      
+      .vk-browser .info-card:last-child,
+      .telegram-browser .info-card:last-child {
+        margin-bottom: 20px;
+      }
+      
+      .vk-browser .venue-card,
+      .telegram-browser .venue-card {
+        margin-bottom: 30px;
+      }
     }
   </style>
 </head>
@@ -703,6 +758,23 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Определяем браузеры с нижней панелью
+  function isVKBrowser() {
+    return navigator.userAgent.match(/VK|vk|Vkontakte/i) !== null;
+  }
+  
+  function isTelegramBrowser() {
+    return navigator.userAgent.match(/Telegram|tg/i) !== null;
+  }
+  
+  if (isVKBrowser()) {
+    document.body.classList.add('vk-browser');
+  }
+  
+  if (isTelegramBrowser()) {
+    document.body.classList.add('telegram-browser');
+  }
+  
   const heartWrapper = document.getElementById('heartWrapper');
   const envelopeOverlay = document.getElementById('envelopeOverlay');
   const mainContent = document.getElementById('mainContent');
@@ -715,7 +787,6 @@ document.addEventListener('DOMContentLoaded', function() {
   let isAnimating = false;
   let scrollLocked = true;
   let startY = 0;
-  let startTransform = 0;
   
   // Функция обновления позиции
   function updatePosition(index, animate = true) {
@@ -768,10 +839,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 300);
   }
   
-  heartWrapper.addEventListener('click', (e) => {
-    e.preventDefault();
-    openEnvelope();
-  });
+  if (heartWrapper) {
+    heartWrapper.addEventListener('click', (e) => {
+      e.preventDefault();
+      openEnvelope();
+    });
+  }
   
   // Обработка колесика мыши
   let wheelTimeout = null;
@@ -807,7 +880,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Обработка тач-свайпов
   let touchStartY = 0;
-  let touchEndY = 0;
   let touchTimeout = null;
   
   window.addEventListener('touchstart', (e) => {
@@ -818,7 +890,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('touchend', (e) => {
     if (scrollLocked || isAnimating || touchTimeout) return;
     
-    touchEndY = e.changedTouches[0].clientY;
+    const touchEndY = e.changedTouches[0].clientY;
     const deltaY = touchStartY - touchEndY;
     
     if (Math.abs(deltaY) < 30) return;
@@ -919,7 +991,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Обработка ресайза
   window.addEventListener('resize', () => {
     if (!scrollLocked) {
-      updatePosition(currentIndex, false);
+      setTimeout(() => {
+        updatePosition(currentIndex, false);
+      }, 100);
     }
   });
 });
