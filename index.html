@@ -415,6 +415,8 @@
       box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
 
     .info-card:hover {
@@ -464,7 +466,8 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      min-width: 132px;
+      min-width: 120px;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .social-btn:hover {
@@ -648,6 +651,30 @@
         transform: translateY(100dvh);
       }
     }
+
+    /* VK Browser Fixes */
+    .vk-browser .flap-triangle {
+      background: #c9a36b !important;
+      backdrop-filter: none !important;
+    }
+    
+    .vk-browser .flap-left,
+    .vk-browser .flap-right {
+      width: 50% !important;
+    }
+    
+    .vk-browser .heart-center-btn {
+      background: #c13b3b !important;
+      -webkit-transform: translateZ(0);
+    }
+    
+    .vk-browser .scroll-indicator {
+      bottom: 30px;
+    }
+    
+    .vk-browser .info-card {
+      transform: translateZ(0);
+    }
   </style>
 </head>
 <body>
@@ -765,6 +792,16 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Определяем VK Mobile
+  function isVKBrowser() {
+    return navigator.userAgent.match(/VK|vk|Vkontakte/i) !== null;
+  }
+  
+  // Добавляем класс для VK
+  if (isVKBrowser()) {
+    document.body.classList.add('vk-browser');
+  }
+  
   const heartWrapper = document.getElementById('heartWrapper');
   const envelopeOverlay = document.getElementById('envelopeOverlay');
   const mainContent = document.getElementById('mainContent');
@@ -773,30 +810,49 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentIndex = 0;
   let isScrolling = false;
   let scrollLocked = true;
-
+  
+  // Функция открытия конверта с учетом VK
   function openEnvelope() {
     if (!envelopeOverlay) return;
-    envelopeOverlay.classList.add('open');
-    if (weddingBg) weddingBg.classList.add('revealed');
     
-    setTimeout(() => {
-      if (mainContent) mainContent.classList.add('visible');
-      scrollLocked = false;
-      if (blocks[0]) {
-        blocks[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-        blocks[0].classList.add('block-visible');
-      }
-      setupIntersectionObserver();
-    }, 50);
+    if (isVKBrowser()) {
+      // Для VK - упрощенная анимация
+      envelopeOverlay.style.transition = 'opacity 0.5s ease';
+      envelopeOverlay.style.opacity = '0';
+      setTimeout(() => {
+        envelopeOverlay.style.display = 'none';
+        if (mainContent) mainContent.classList.add('visible');
+        if (weddingBg) weddingBg.classList.add('revealed');
+        scrollLocked = false;
+        if (blocks[0]) {
+          blocks[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          blocks[0].classList.add('block-visible');
+        }
+        setupIntersectionObserver();
+      }, 500);
+    } else {
+      envelopeOverlay.classList.add('open');
+      
+      setTimeout(() => {
+        if (mainContent) mainContent.classList.add('visible');
+        if (weddingBg) weddingBg.classList.add('revealed');
+        scrollLocked = false;
+        if (blocks[0]) {
+          blocks[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          blocks[0].classList.add('block-visible');
+        }
+        setupIntersectionObserver();
+      }, 50);
+    }
   }
-
+  
   if (heartWrapper) {
     heartWrapper.addEventListener('click', (e) => {
       e.preventDefault();
       openEnvelope();
     });
   }
-
+  
   function setupIntersectionObserver() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -805,7 +861,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { threshold: 0.3 });
     blocks.forEach(block => observer.observe(block));
   }
-
+  
   function scrollToBlock(index) {
     if (isScrolling || scrollLocked) return;
     if (index < 0) index = 0;
@@ -816,7 +872,7 @@ document.addEventListener('DOMContentLoaded', function() {
     blocks[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => { isScrolling = false; }, 500);
   }
-
+  
   let wheelTimeout = null;
   window.addEventListener('wheel', (e) => {
     if (scrollLocked) return;
@@ -835,7 +891,7 @@ document.addEventListener('DOMContentLoaded', function() {
       wheelTimeout = setTimeout(() => wheelTimeout = null, 600);
     }
   }, { passive: false });
-
+  
   let touchStartY = 0, touchTimeout = null;
   window.addEventListener('touchstart', (e) => {
     if (!scrollLocked) touchStartY = e.touches[0].clientY;
@@ -849,14 +905,14 @@ document.addEventListener('DOMContentLoaded', function() {
       touchTimeout = setTimeout(() => touchTimeout = null, 600);
     }
   });
-
+  
   const scrollHint = document.getElementById('scrollHint');
   if (scrollHint) {
     scrollHint.addEventListener('click', () => {
       if (!scrollLocked && currentIndex < blocks.length - 1) scrollToBlock(currentIndex + 1);
     });
   }
-
+  
   // Социальные ссылки
   const telegramBtn = document.getElementById('telegramLink');
   const vkBtn = document.getElementById('vkLink');
@@ -864,7 +920,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const VK_URL = 'https://vk.me/join/rL0s_gEw/AYAHkjpwNfgRKUj0Mzwwx90K5g=';
   if (telegramBtn) telegramBtn.href = TELEGRAM_URL;
   if (vkBtn) vkBtn.href = VK_URL;
-
+  
   // Яндекс Карты
   const venueLat = 52.462893;
   const venueLon = 38.953394;
@@ -898,7 +954,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   loadYandexMap();
-
+  
   function updateCountdown() {
     const weddingDate = new Date(2026, 7, 9, 16, 0, 0);
     const now = new Date();
@@ -921,6 +977,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
+  
+  // Для VK - принудительный пересчет размеров
+  if (isVKBrowser()) {
+    window.addEventListener('resize', function() {
+      if (envelopeOverlay && !envelopeOverlay.classList.contains('open') && envelopeOverlay.style.display !== 'none') {
+        document.body.style.height = window.innerHeight + 'px';
+      }
+    });
+  }
 });
 </script>
 </body>
